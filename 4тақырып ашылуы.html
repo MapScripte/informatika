@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Жаңа тақырыпты анықта!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 42px; /* Тақырыпты үлкейттік */
+        }
+
+        .container {
+            display: flex;
+            gap: 30px; /* Карталар арасын алшақтаттық */
+            margin-bottom: 50px;
+            flex-wrap: wrap; /* Мобильді нұсқада сыйымды болуы үшін */
+            justify-content: center;
+        }
+
+        .card {
+            width: 280px;  /* Енін үлкейттік */
+            height: 380px; /* Биіктігін үлкейттік */
+            background-color: #3498db;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.6s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .card:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card .front {
+            font-size: 120px; /* Сұрақ белгісін үлкейттік */
+            color: white;
+            font-weight: bold;
+        }
+
+        .card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            transform: rotateY(180deg);
+            background-size: cover;
+            background-position: center;
+            border: 8px solid #fff;
+        }
+
+        /* Суреттер түстері */
+        #img1 { background-image: url('жаңа т1.png'); background-color: #ecf0f1; }
+        #img2 { background-image: url('жаңа т2.png'); background-color: #ecf0f1; }
+        #img3 { background-image: url('жаңа т3.png'); background-color: #ecf0f1; }
+
+        .reveal-btn {
+            padding: 20px 60px;
+            font-size: 28px; /* Батырманы үлкейттік */
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            display: none;
+            transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+            font-weight: bold;
+        }
+
+        #topic-title {
+            display: none;
+            font-size: 65px; /* Тақырып ашылғанда өте үлкен болады */
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: center;
+            animation: fadeIn 1.5s;
+            margin-top: 20px;
+            line-height: 1.2;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        p { font-size: 24px; color: #7f8c8d; margin-bottom: 30px; }
+
+        .back-btn {
+            position: fixed; top: 20px; left: 20px;
+            background-color: #3498db; color: white;
+            border: none; padding: 12px 24px;
+            font-size: 18px; border-radius: 12px;
+            cursor: pointer; z-index: 150;
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" onclick="history.back()">⬅ Артқа қайту</button>
+
+    <div id="game-area">
+        <h1>Бүгінгі сабақтың тақырыбы қандай?</h1>
+        <p style="text-align: center;">Суреттерді ашып, мағынасын біріктіріп көр...</p>
+        
+        <div class="container">
+            <div class="card" onclick="flipCard(this)">
+                <div class="front">?</div>
+                <div class="back" id="img1"></div>
+            </div>
+            <div class="card" onclick="flipCard(this)">
+                <div class="front">?</div>
+                <div class="back" id="img2"></div>
+            </div>
+            <div class="card" onclick="flipCard(this)">
+                <div class="front">?</div>
+                <div class="back" id="img3"></div>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button id="check-btn" class="reveal-btn" onclick="showTopic()">Тақырыпты ашу</button>
+        </div>
+    </div>
+
+    <div id="topic-title">
+        <span style="font-size: 40px; color: #e67e22;">Жаңа тақырып:</span> <br>
+        "Ғаламторда іздеуді ұйымдастыру"
+    </div>
+
+    <script>
+        let flippedCount = 0;
+        const totalCards = 3;
+
+        function flipCard(card) {
+            if (!card.classList.contains('flipped')) {
+                card.classList.add('flipped');
+                flippedCount++;
+
+                if (flippedCount === totalCards) {
+                    setTimeout(() => {
+                        document.getElementById('check-btn').style.display = 'inline-block';
+                    }, 500);
+                }
+            }
+        }
+
+        function showTopic() {
+            document.getElementById('game-area').style.display = 'none';
+            const topic = document.getElementById('topic-title');
+            topic.style.display = 'block';
+            console.log("Сабақ басталды!");
+        }
+    </script>
+</body>
+</html>
